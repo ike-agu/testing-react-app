@@ -13,3 +13,15 @@ test('renders 3 list items', () => {
   // expect(listItems).toHaveLength(3);
   expect(listItems.length).toBe(3);
 });
+
+test('renders title', () => {
+  render(<App />);
+  const title = screen.getByTestId("test1");
+  expect(title).toBeInTheDocument()
+});
+
+test('sum should be 5', () => {
+  render(<App />);
+  const sum = screen.getByTitle('sum');
+  expect(sum.textContent).toBe('5')
+});
