@@ -1,5 +1,6 @@
-import {render, screen} from "@testing-library/react"
+import {fireEvent, render, screen} from "@testing-library/react"
 import Login from "../Login"
+
 
 
 test("username input should be rendered", () => {
@@ -47,11 +48,28 @@ test("error messages should not be visible", () => {
 test("username input should change", () => {
   render(<Login/>);
   const userNameInputElement = screen.getByPlaceholderText(/username/i);
-  expect(userNameInputElement.value).toBe("")
+  const testValue = "test";
+  fireEvent.change(userNameInputElement, {target: { value: testValue }});
+  expect(userNameInputElement.value).toBe(testValue)
 })
 
 test("password input should change", () => {
   render(<Login/>);
-  const passwordInputElement = screen.getByPlaceholderText(/username/i);
-  expect(passwordInputElement.value).toBe("")
+  const passwordInputElement = screen.getByPlaceholderText(/password/i);
+  const testValue = "test";
+  fireEvent.change(passwordInputElement, {target: { value: testValue }});
+  expect(passwordInputElement.value).toBe(testValue)
+})
+
+test("button input should not be disabled when input exist", () => {
+  render(<Login/>);
+  const buttonElement = screen.getByRole("button");
+
+  const userNameInputElement = screen.getByPlaceholderText(/username/i);
+  const passwordInputElement = screen.getByPlaceholderText(/password/i);
+
+  const testValue = "test";
+  fireEvent.change(userNameInputElement, {target: { value: testValue }});
+  fireEvent.change(passwordInputElement, {target: { value: testValue }});
+  expect(buttonElement).not.toBeDisabled()
 })
