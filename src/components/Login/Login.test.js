@@ -2,6 +2,19 @@ import {fireEvent, render, screen} from "@testing-library/react"
 import Login from "../Login"
 
 
+// this is simulating only for login that is why I have it here and not in mocks folder
+// This isi to test fake api calls
+jest.mock('axios', ()=> ({
+
+  __esModule:true,
+  default: {
+    get: ()=> ({
+      data: {id:1, name:"Ikenna"},
+    }),
+  },
+
+}));
+
 
 test("username input should be rendered", () => {
   render(<Login/>);
@@ -72,4 +85,26 @@ test("button input should not be disabled when input exist", () => {
   fireEvent.change(userNameInputElement, {target: { value: testValue }});
   fireEvent.change(passwordInputElement, {target: { value: testValue }});
   expect(buttonElement).not.toBeDisabled()
+})
+
+
+test("loading should not be rendered", () => {
+  render(<Login/>);
+  const buttonElement = screen.getByRole("button");
+  expect(buttonElement).not.toHaveTextContent(/please wait/i)
+})
+
+test("loading should be rendered when clicked", () => {
+  render(<Login/>);
+  const buttonElement = screen.getByRole("button");
+
+  const userNameInputElement = screen.getByPlaceholderText(/username/i);
+  const passwordInputElement = screen.getByPlaceholderText(/password/i);
+
+  const testValue = "test";
+  fireEvent.change(userNameInputElement, {target: { value: testValue }});
+  fireEvent.change(passwordInputElement, {target: { value: testValue }});
+  fireEvent.click(buttonElement)
+
+  expect(buttonElement).toHaveTextContent(/please wait/i)
 })
