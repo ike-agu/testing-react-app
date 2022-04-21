@@ -11,13 +11,13 @@ const Login = () => {
   const handleClick = async(e) => {
     e.preventDefault();
     setLoading(true)
-
     try {
       const {data} = await axios.get('https://jsonplaceholder.typicode.com/users/1');
       setUser(data)
     } catch (error) {
       setError(true)
     }
+       setLoading(false)
   };
 
   return (
